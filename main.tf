@@ -49,9 +49,9 @@ resource "aws_security_group" "ssh_http_https" {
 }
 
 resource "aws_instance" "App"{
-        ami = "ami-0e342d72b12109f91"  #AMI defined in variables.tf file
-        instance_type = "t2.micro"  #Instance type defined in variables.tf file
-        key_name = "Linux-Frankfurt" #KeyPair name to be attached to the instance. Forgot to add in variables :D
+        ami = "ami-0e342d72b12109f91"  #define AMI
+        instance_type = "t2.micro"  #Define Instance Type
+        key_name = "Linux-Frankfurt" #KeyPair name to be attached to the instance. 
         vpc_security_group_ids = ["${aws_security_group.ssh_http_https.id}"] 
         provisioner "local-exec" { command = "sleep 20" } 
                 #local-exec runs our app server related playbook
