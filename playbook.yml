@@ -1,0 +1,54 @@
+#################################################
+# DO Community Playbooks: Docker
+#################################################
+---
+- hosts: all
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+    - name: Install aptitude using apt
+      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt: update_cache=yes name=docker-ce state=latest
+    - command: apt install python-pip -y
+     
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+        #    - name: Pull default Docker image
+        # docker_image:
+        # name: httpd
+        # source: pull
+
+    # Creates the number of containers defined by the variable create_containers, using values from vars file
+    #   - command: mkdir -p /home/ubuntu/.chainlink/tls
+    - git:
+       repo: https://github.com/Pratiksonavane/chainlink-assets.git
+       dest: /home/ubuntu/.chainlink
+       #    - command: mv /home/ubuntu/chainlink-assets /home/ubuntu/.chainlink
+    - command: chown -R ubuntu:ubuntu /home/ubuntu/.chainlink
+    - command: docker run --name postgres -e POSTGRES_PASSWORD=redhat -p 5422:5432 -d postgres
+    - pause:
+       seconds: 10
+    - shell: cat /home/ubuntu/.chainlink/postgres.pgsql | docker exec -i postgres psql -U postgres -d postgres
+      #    - shell: docker exec  postgres pg_dump -U postgres postgres < /home/ubuntu/ansible-playbooks/docker_ubuntu1804/postgres.pgsql
+    - command: docker run --name chainlink-tls-primary -p 6689:6689 -v /home/ubuntu/.chainlink:/chainlink -itd -e ROOT=/chainlink -e LOG_LEVEL=debug -e ETH_CHAIN_ID=3 -e ETH_URL=wss://ropsten-rpc.linkpool.io/ws -e DATABASE_URL=postgresql://postgres:redhat@172.17.0.2:5432/postgres?sslmode=disable -e ALLOW_ORIGINS=* -e TLS_CERT_PATH=/chainlink/tls/server.crt -e TLS_KEY_PATH=/chainlink/tls/server.key smartcontract/chainlink local n -p /chainlink/.password
+
