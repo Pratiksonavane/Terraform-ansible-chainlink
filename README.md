@@ -20,9 +20,7 @@ Clone Terraform-ansible-chainlink
 
 $ git clone https://github.com/Pratiksonavane/Terraform-ansible-chainlink
 
-$ cd terraform-ansible-chainlink
-
-Dowload pem key in this location
+$ cd terraform-ansible-chainlinkn
 
 add access key id and secret key id in maint.tf 
 
@@ -30,6 +28,9 @@ add access key id and secret key id in maint.tf
         
         secret_key = ""
         
+
+Dowload pem key in this location
+
 change pem key in main.tf: replace Linux-Frankfurt with your name.pem key
 
 Run terraform 
