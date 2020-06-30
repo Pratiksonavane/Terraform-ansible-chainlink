@@ -22,8 +22,10 @@ $ git clone https://github.com/Pratiksonavane/Terraform-ansible-chainlink
 
 $ cd terraform-ansible-chainlinkn
 
-add access key id and secret key id in maint.tf 
+add region access key id and secret key id in maint.tf 
 
+        region = ""
+        
         access_key = ""
         
         secret_key = ""
