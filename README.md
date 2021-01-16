@@ -20,7 +20,7 @@ Clone Terraform-ansible-chainlink
 
 $ git clone https://github.com/Pratiksonavane/Terraform-ansible-chainlink
 
-$ cd terraform-ansible-chainlinkn
+$ cd terraform-ansible-chainlink
 
 add region, access key id, secret key id and vpc id in maint.tf 
 
@@ -33,7 +33,7 @@ add region, access key id, secret key id and vpc id in maint.tf
         vpc_id          = "vpc-f421f99e" #Default VPC id here
         
 
-Dowload pem key in this location
+Download pem key in this location
 
 change pem key in main.tf: replace Linux-Frankfurt with your name.pem key
 
